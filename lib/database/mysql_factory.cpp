@@ -212,8 +212,26 @@ namespace ToDo
         switch (ord)
         {
             case order.asc:
+                tmp = SQL_getTasks();
                 break;
             case order.desc:
+                try
+                {
+                    sql::Connection * con;
+                    sql::Statement * stm;
+                    sql::ResultSet * rs;
+
+                    con = getConnection();
+                    stm = con->createStatement();
+                    rs = stm->executeQuery(SQL_GET_TASKS_DESC);
+
+                    for (size_t i = 0; rs->next(); i++)
+                        tmp.at(i) = rs->getString("task");
+                    closeConnection(con);
+                    closeStatement(stm);
+                    closeResultSet(rs);
+                }
+                catch(sql::SQLException & ex) { }
                 break;
             default:
                 std::cout << "Erro get Order..." << std::endl;
@@ -226,6 +244,24 @@ namespace ToDo
     std::vector<int> ODatabase::SQL_getPostions()
     {
         std::vector<int> tmp;
+        try
+        {
+            sql::Connection * con;
+            sql::Statement * stm;
+            sql::ResultSet * rs;
+
+            con = getConnection();
+            stm = con->createStatement();
+            rs = stm->executeQuery(SQL_GET_POSTIONS_ASC);
+
+            for (size_t i = 0; rs->next(); i++)
+                tmp.at(i) = rs->getInt("position");
+            closeConnection(con);
+            closeStatement(stm);
+            closeResultSet(rs);
+        }
+        catch(sql::SQLException & ex) { }
+
         return tmp;
     }
 
