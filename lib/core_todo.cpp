@@ -7,12 +7,12 @@ namespace ToDo
         return false;
     }
 
-    bool Task::remove(int postion)
+    bool Task::remove(int position)
     {
         return false;
     }
 
-    bool Task::att(std::string task, int postion)
+    bool Task::att(std::string task, int position)
     {
         return false;
     }

@@ -5,7 +5,6 @@
 
 namespace ToDo
 {
-
     struct data
     {
         std::vector<std::string> task;
