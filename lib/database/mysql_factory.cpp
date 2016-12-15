@@ -47,6 +47,17 @@ namespace ToDo
         catch(sql::SQLException & ex) { return false; }
     }
 
+    bool Factory::closeResultSet(sql::ResultSet * rs)
+    {
+        try
+        {
+            rs->close();
+            delete rs;
+            return true;
+        }
+        catch(sql::SQLException & ex) { return false; }
+    }
+
     bool Factory::init(sql::Connection * con)
     {
         try
@@ -95,7 +106,7 @@ namespace ToDo
             con = getConnection();
             sql::PreparedStatement * pstm;
             pstm = con->prepareStatement(SQL_ADD_TASK_ORDER);
-            pstm->setString(1,task);  //Task
+            pstm->setString(1,task);    //Task
             pstm->setInt(2, order);     //Order
             pstm->executeUpdate();
             if(closePreparedStatement(pstm)) delete pstm;
@@ -154,10 +165,19 @@ namespace ToDo
         catch(sql::SQLException & ex) { return false; }
     }
 
-    bool IDatabase::SQL_update_task_order(std::string task, int order, int newOrder)
+    bool IDatabase::SQL_update_task_order(std::string task, int newOrder, int order)
     {
         try
         {
+            sql::Connection * con;
+            con = getConnection();
+            sql::PreparedStatement pstm;
+            pstm = con->prepareStatement(SQL_UPDATE_TASK_ORDER);
+            pstm->setString(1,task);
+            pstm->setInt(2,new_order);
+            pstm->setInt(3,order);
+            closePreparedStatement(pstm);
+            closeConnection(con);
             return true;
         }
         catch(sql::SQLException & ex) { return false; }

@@ -22,6 +22,7 @@ namespace ToDo
         bool closeConnection(sql::Connection *);
         bool closeStatement(sql::Statement *);
         bool closePreparedStatement(sql::PreparedStatement *);
+        bool closeResultSet(sql::ResultSet *);
         bool init(sql::Connection *);
     };
 
