@@ -15,14 +15,20 @@
 
 namespace ToDo
 {
+    enum order
+    {
+        asc,
+        desc
+    };
+
     class Factory
     {
     public:
         sql::Connection * getConnection();
-        bool closeConnection(sql::Connection *);
-        bool closeStatement(sql::Statement *);
-        bool closePreparedStatement(sql::PreparedStatement *);
-        bool closeResultSet(sql::ResultSet *);
+        bool closeConnection(sql::Connection *);               //Close and delete
+        bool closeStatement(sql::Statement *);                 //Close and delete
+        bool closePreparedStatement(sql::PreparedStatement *); //Close and delete
+        bool closeResultSet(sql::ResultSet *);                 //Close and delete
         bool init(sql::Connection *);
     };
 
@@ -45,7 +51,7 @@ namespace ToDo
     class ODatabase : public IODatabse
     {
     public:
-        std::vector<std::string> SQL_getTasks();
+        std::vector<std::string> SQL_getTasks();                  //Order by ASC
         std::vector<std::string> SQL_getTasks(order);             //Get task by Order
         std::vector<int> SQL_getPostions();
         std::string SQL_getTasksByPostion(int);

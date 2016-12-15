@@ -66,8 +66,7 @@ namespace ToDo
             stm = con->createStatement();
             stm->execute(SQL_CREATE_DATABASE);
             stm->execute(SQL_CREATE_TABLE);
-            stm->close();
-            delete stm;
+            closeStatement(stm);
             return true;
         }
         catch(sql::SQLException & ex) { return false; }
@@ -90,8 +89,8 @@ namespace ToDo
             // ------------------------------------------
             pstm->executeUpdate();
 
-            if(closePreparedStatement(pstm)) delete pstm;
-            if(closeConnection(con)) delete con;
+            closePreparedStatement(pstm);
+            closeConnection(con);
 
             return true;
         }
@@ -109,8 +108,8 @@ namespace ToDo
             pstm->setString(1,task);    //Task
             pstm->setInt(2, order);     //Order
             pstm->executeUpdate();
-            if(closePreparedStatement(pstm)) delete pstm;
-            if(closeConnection(con)) delete con;
+            closePreparedStatement(pstm);
+            closeConnection(con);
             return true;
         }
         catch(sql::SQLException & ex) { return false; }
@@ -186,6 +185,24 @@ namespace ToDo
     std::vector<std::string> ODatabase::SQL_getTasks()
     {
         std::vector<std::string> tmp;
+        try
+        {
+            sql::Connection * con;
+            sql::Statement * stm;
+            sql::ResultSet * rs;
+
+            con = getConnection();
+            stm = con->createStatement();
+            rs = stm->executeQuery(SQL_GET_TASKS_ASC);
+
+            for (size_t i = 0; rs->next(); i++)
+                tmp.at(i) = rs->getString("task");
+            closeConnection(con);
+            closeStatement(stm);
+            closeResultSet(rs);
+        }
+        catch(sql::SQLException & ex) { }
+
         return tmp;
     }
 
@@ -194,9 +211,9 @@ namespace ToDo
         std::vector<std::string> tmp;
         switch (ord)
         {
-            case asc:
+            case order.asc:
                 break;
-            case desc:
+            case order.desc:
                 break;
             default:
                 std::cout << "Erro get Order..." << std::endl;

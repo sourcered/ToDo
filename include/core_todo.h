@@ -5,11 +5,6 @@
 
 namespace ToDo
 {
-    enum order
-    {
-        asc,
-        desc
-    };
 
     struct data
     {
@@ -22,7 +17,7 @@ namespace ToDo
     public:
         bool add(std::string);                          //Add task & auto increment position
         bool remove(int);                               //Remove task By Positon
-        bool att(std::string, int)                      //Update Task set Task get Postion
+        bool att(std::string, int);                     //Update Task set Task get Postion
     };
 }
 
