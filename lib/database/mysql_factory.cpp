@@ -7,7 +7,8 @@ namespace ToDo
         sql::Driver * driver;
         sql::Connection * con;
 
-        driver = get_driver_instance();
+        driver =  get_driver_instance();
+
         con = driver->connect("tcp://127.0.0.1:3306", "root", "1234");
         con->setSchema("DB_ToDo");
 
@@ -84,8 +85,8 @@ namespace ToDo
             pstm->setString(1,task);  //Task
 
             // ----------GET LAST ORDER------------------
-            int order = 1;  //Get order
-            pstm->setInt(2,order);  //Add to the last element Order
+            int order = SQL_getLastOrder();  //Get order
+            pstm->setInt(2,order);           //Add to the last element Order
             // ------------------------------------------
             pstm->executeUpdate();
 
@@ -102,12 +103,16 @@ namespace ToDo
         try
         {
             sql::Connection * con;
-            con = getConnection();
             sql::PreparedStatement * pstm;
+
+            con = getConnection();
             pstm = con->prepareStatement(SQL_ADD_TASK_ORDER);
+
             pstm->setString(1,task);    //Task
             pstm->setInt(2, order);     //Order
+
             pstm->executeUpdate();
+
             closePreparedStatement(pstm);
             closeConnection(con);
             return true;
@@ -120,9 +125,13 @@ namespace ToDo
         try
         {
             sql::Connection * con;
+            sql::PreparedStatement * pstm;
+
             con = getConnection();
-            sql::PreparedStatement pstm;
             pstm = con->prepareStatement(SQL_REMOVE_TASK);
+
+            pstm->executeUpdate();
+
             closePreparedStatement(pstm);
             closeConnection(con);
             return true;
@@ -135,11 +144,16 @@ namespace ToDo
         try
         {
             sql::Connection * con;
+            sql::PreparedStatement * pstm;
+
             con = getConnection();
-            sql::PreparedStatement pstm;
             pstm = con->prepareStatement(SQL_UPDATE_TASK);
+
             pstm->setString(1,task);
             pstm->setInt(2,order);
+
+            pstm->executeUpdate();
+
             closePreparedStatement(pstm);
             closeConnection(con);
             return true;
@@ -152,11 +166,15 @@ namespace ToDo
         try
         {
             sql::Connection * con;
+            sql::PreparedStatement * pstm;
+
             con = getConnection();
-            sql::PreparedStatement pstm;
             pstm = con->prepareStatement(SQL_UPDATE_ORDER);
+
             pstm->setInt(1,new_order);
             pstm->setInt(2,order);
+            pstm->executeUpdate();
+
             closePreparedStatement(pstm);
             closeConnection(con);
             return true;
@@ -169,12 +187,17 @@ namespace ToDo
         try
         {
             sql::Connection * con;
+            sql::PreparedStatement * pstm;
+
             con = getConnection();
-            sql::PreparedStatement pstm;
             pstm = con->prepareStatement(SQL_UPDATE_TASK_ORDER);
+
             pstm->setString(1,task);
-            pstm->setInt(2,new_order);
+            pstm->setInt(2, newOrder);
             pstm->setInt(3,order);
+
+            pstm->executeUpdate();
+
             closePreparedStatement(pstm);
             closeConnection(con);
             return true;
@@ -197,9 +220,10 @@ namespace ToDo
 
             for (size_t i = 0; rs->next(); i++)
                 tmp.at(i) = rs->getString("task");
-            closeConnection(con);
-            closeStatement(stm);
+
             closeResultSet(rs);
+            closeStatement(stm);
+            closeConnection(con);
         }
         catch(sql::SQLException & ex) { }
 
@@ -211,10 +235,10 @@ namespace ToDo
         std::vector<std::string> tmp;
         switch (ord)
         {
-            case order.asc:
+            case asc:
                 tmp = SQL_getTasks();
                 break;
-            case order.desc:
+            case desc:
                 try
                 {
                     sql::Connection * con;
@@ -227,9 +251,10 @@ namespace ToDo
 
                     for (size_t i = 0; rs->next(); i++)
                         tmp.at(i) = rs->getString("task");
-                    closeConnection(con);
-                    closeStatement(stm);
+
                     closeResultSet(rs);
+                    closeStatement(stm);
+                    closeConnection(con);
                 }
                 catch(sql::SQLException & ex) { }
                 break;
@@ -256,18 +281,63 @@ namespace ToDo
 
             for (size_t i = 0; rs->next(); i++)
                 tmp.at(i) = rs->getInt("position");
-            closeConnection(con);
-            closeStatement(stm);
+
             closeResultSet(rs);
+            closeStatement(stm);
+            closeConnection(con);
         }
         catch(sql::SQLException & ex) { }
 
         return tmp;
     }
 
-    std::string ODatabase::SQL_getTasksByPostion(int)
+    std::string ODatabase::SQL_getTaskByPostion(int position)
     {
-        std::string tmp;
+        std::string tmp = "";
+        try
+        {
+            sql::Connection * con;
+            sql::PreparedStatement * pstm;
+            sql::ResultSet * rs;
+
+            con = getConnection();
+            pstm = con->prepareStatement(SQL_GET_TASK);
+            pstm->setInt(1, position);
+            rs = pstm->executeQuery(SQL_GET_TASK);
+
+            tmp = rs->getString("task");
+
+            closeResultSet(rs);
+            closePreparedStatement(pstm);
+            closeConnection(con);
+        }
+        catch(sql::SQLException & ex) { }
+
+        return tmp;
+    }
+
+    int IODatabse::SQL_getLastOrder()
+    {
+        int tmp;
+        try
+        {
+            sql::Connection * con;
+            sql::Statement * stm;
+            sql::ResultSet * rs;
+
+            con = getConnection();
+            stm = con->createStatement();
+
+            rs = stm->executeQuery(SQL_GET_LAST_POSITION);
+
+            tmp = rs->getInt("position");
+
+            closeResultSet(rs);
+            closeStatement(stm);
+            closeConnection(con);
+        }
+        catch(sql::SQLException & ex) {  }
+
         return tmp;
     }
 }

@@ -35,6 +35,17 @@ namespace ToDo
     class IODatabse : public Factory                            //Abstract class
     {
     public:
+        int SQL_getLastOrder();
+    };
+
+    class ODatabase : public IODatabse
+    {
+    public:
+        std::vector<std::string> SQL_getTasks();                 //Order by ASC
+        std::vector<std::string> SQL_getTasks(order);            //Get task by Order
+        std::vector<int> SQL_getPostions();
+        std::string SQL_getTaskByPostion(int);
+
     };
 
     class IDatabase : public IODatabse
@@ -46,15 +57,6 @@ namespace ToDo
         bool SQL_update_task(std::string, int);                   //Update just task     || (new string, order)
         bool SQL_update_order(int, int);                          //Update just order    || (new Order, old order)
         bool SQL_update_task_order(std::string, int, int);        //Update task &  order || (new string, new order, old order)
-    };
-
-    class ODatabase : public IODatabse
-    {
-    public:
-        std::vector<std::string> SQL_getTasks();                  //Order by ASC
-        std::vector<std::string> SQL_getTasks(order);             //Get task by Order
-        std::vector<int> SQL_getPostions();
-        std::string SQL_getTasksByPostion(int);
     };
 
 }

@@ -17,6 +17,8 @@ const std::string SQL_GET_TASKS_ASC     = "SELECT task FROM todo ORDER BY positi
 const std::string SQL_GET_TASKS_DESC    = "SELECT task FROM todo ORDER BY position DESC";
 const std::string SQL_GET_POSTIONS_ASC  = "SELECT position FROM todo ORDER BY position ASC";
 const std::string SQL_GET_POSTIONS_DESC = "SELECT position FROM todo ORDER BY position DESC";
+const std::string SQL_GET_TASK          = "SELECT task FROM todo WHERE position=? LIMIT 1";
+const std::string SQL_GET_LAST_POSITION    = "SELECT position FROM todo ORDER BY DESC LIMIT 1";
 
 #else
 const std::string SQL_CREATE_DATABASE = "CREATE DATABASE IF NOT EXISTS DB_ToDo"
