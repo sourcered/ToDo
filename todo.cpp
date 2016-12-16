@@ -2,6 +2,9 @@
 
 int main()
 {
+    ToDo::Task * c = new ToDo::Task();
+    c->remove(5);
+    delete c;
 
     return 0;
 }

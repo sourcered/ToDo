@@ -25,11 +25,11 @@ namespace ToDo
     {
     public:
         sql::Connection * getConnection();
-        bool closeConnection(sql::Connection *);               //Close and delete
-        bool closeStatement(sql::Statement *);                 //Close and delete
-        bool closePreparedStatement(sql::PreparedStatement *); //Close and delete
-        bool closeResultSet(sql::ResultSet *);                 //Close and delete
-        bool init(sql::Connection *);
+        bool closeConnection(sql::Connection *&);               //Close and delete
+        bool closeStatement(sql::Statement *&);                 //Close and delete
+        bool closePreparedStatement(sql::PreparedStatement *&); //Close and delete
+        bool closeResultSet(sql::ResultSet *&);                 //Close and delete
+        bool init();
     };
 
     class IODatabse : public Factory                            //Abstract class

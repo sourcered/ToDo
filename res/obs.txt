@@ -1,6 +1,11 @@
+#Create a unique connection, improving memory and process, (Problem : Every operation request a new connection)
+#Improve connection class Task (add,remove,att, etc.), Get only a connection, maybe in the constructor
+
+DONE:
 #Create database if not exists When start
 #Get last order core_todo::83
 #Pass pointer by reference Factory's class
 
 
+OBS:
 #Compiler Flags: sudo g++ -Wall -I/usr/include/cppconn -o testapp tester.cpp -L/usr/lib -lmysqlcppconn

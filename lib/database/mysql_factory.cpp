@@ -15,59 +15,72 @@ namespace ToDo
         return con;
     }
 
-    bool Factory::closeConnection(sql::Connection * con)
+    bool Factory::closeConnection(sql::Connection *& con)
     {
       try
       {
           con->close();
           delete con;
+          con = nullptr;
           return true;
       }
       catch(sql::SQLException & ex) { return false; }
     }
 
-    bool Factory::closeStatement(sql::Statement * stm)
+    bool Factory::closeStatement(sql::Statement *& stm)
     {
         try
         {
             stm->close();
             delete stm;
+            stm = nullptr;
             return true;
         }
         catch(sql::SQLException & ex) { return false; }
     }
 
-    bool Factory::closePreparedStatement(sql::PreparedStatement * pstm)
+    bool Factory::closePreparedStatement(sql::PreparedStatement *& pstm)
     {
         try
         {
             pstm->close();
             delete pstm;
+            pstm = nullptr;
             return true;
         }
         catch(sql::SQLException & ex) { return false; }
     }
 
-    bool Factory::closeResultSet(sql::ResultSet * rs)
+    bool Factory::closeResultSet(sql::ResultSet *& rs)
     {
         try
         {
             rs->close();
             delete rs;
+            rs = nullptr;
             return true;
         }
         catch(sql::SQLException & ex) { return false; }
     }
 
-    bool Factory::init(sql::Connection * con)
+    bool Factory::init()
     {
         try
         {
+            sql::Driver * driver;
+            sql::Connection * con;
+
+            driver =  get_driver_instance();
+            con = driver->connect("tcp://127.0.0.1:3306", "root", "1234");
+
             sql::Statement * stm;
             stm = con->createStatement();
             stm->execute(SQL_CREATE_DATABASE);
+            con->setSchema("DB_ToDo");
             stm->execute(SQL_CREATE_TABLE);
+
             closeStatement(stm);
+            closeConnection(con);
             return true;
         }
         catch(sql::SQLException & ex) { return false; }
@@ -82,11 +95,11 @@ namespace ToDo
 
             sql::PreparedStatement * pstm;
             pstm = con->prepareStatement(SQL_ADD_TASK);
-            pstm->setString(1,task);  //Task
+            pstm->setString(1,task);  //New Task
 
             // ----------GET LAST ORDER------------------
-            int order = SQL_getLastOrder();  //Get order
-            pstm->setInt(2,order);           //Add to the last element Order
+            int order = SQL_getLastOrder() + 1;          //Get order
+            pstm->setInt(2,order);                       //Add to the last element Order
             // ------------------------------------------
             pstm->executeUpdate();
 
@@ -120,7 +133,7 @@ namespace ToDo
         catch(sql::SQLException & ex) { return false; }
     }
 
-    bool IDatabase::SQL_remove_task(int order)
+    bool IDatabase::SQL_remove_task(int position)
     {
         try
         {
@@ -129,7 +142,7 @@ namespace ToDo
 
             con = getConnection();
             pstm = con->prepareStatement(SQL_REMOVE_TASK);
-
+            pstm->setInt(1, position);
             pstm->executeUpdate();
 
             closePreparedStatement(pstm);
@@ -318,7 +331,7 @@ namespace ToDo
 
     int IODatabse::SQL_getLastOrder()
     {
-        int tmp;
+        int tmp = -1;
         try
         {
             sql::Connection * con;

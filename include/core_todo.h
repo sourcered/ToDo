@@ -13,7 +13,11 @@ namespace ToDo
 
     class Task
     {
+    private:
+        IODatabse io;
+        bool state = false;
     public:
+        explicit Task();
         bool add(std::string);                          //Add task & auto increment position
         bool remove(int);                               //Remove task By Positon
         bool att(std::string, int);                     //Update Task set Task get Postion
