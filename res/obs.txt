@@ -9,7 +9,7 @@ DONE:
 
 
 OBS:
-#Compiler Flags: sudo g++ -Wall -I/usr/include/cppconn -o testapp tester.cpp -L/usr/lib -lmysqlcppconn
+#Compiler Flags: sudo g++ -std=c++14 -Wall -I/usr/include/cppconn -o todo todo.cpp lib/core_todo.cpp lib/database/mysql_factory.cpp -L/usr/lib -lmysqlcppconn
 
 TO ADD:
 #SwapPosition -> (P1, P2) :  tmp = P1 , P1 = P2, P2 = tmp

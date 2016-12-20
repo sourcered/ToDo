@@ -3,8 +3,12 @@
 int main()
 {
     ToDo::Task * c = new ToDo::Task();
-    c->remove(5);
+    // std::cout << c->att("Sair com a bike...", 1) << endl;
     delete c;
+
+    ToDo::Log * l = new ToDo::Log();
+    l->print_task(1);
+    delete l;
 
     return 0;
 }

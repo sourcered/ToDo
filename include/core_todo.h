@@ -22,6 +22,14 @@ namespace ToDo
         bool remove(int);                               //Remove task By Positon
         bool att(std::string, int);                     //Update Task set Task get Postion
     };
+
+    class Log
+    {
+    private:
+    public:
+        void print_tasks();
+        void print_task(int);
+    };
 }
 
 #endif

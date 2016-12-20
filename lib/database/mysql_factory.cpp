@@ -143,6 +143,7 @@ namespace ToDo
             con = getConnection();
             pstm = con->prepareStatement(SQL_REMOVE_TASK);
             pstm->setInt(1, position);
+
             pstm->executeUpdate();
 
             closePreparedStatement(pstm);
@@ -232,7 +233,7 @@ namespace ToDo
             rs = stm->executeQuery(SQL_GET_TASKS_ASC);
 
             for (size_t i = 0; rs->next(); i++)
-                tmp.at(i) = rs->getString("task");
+                tmp.push_back(rs->getString("task"));
 
             closeResultSet(rs);
             closeStatement(stm);
@@ -314,14 +315,16 @@ namespace ToDo
             sql::ResultSet * rs;
 
             con = getConnection();
+
             pstm = con->prepareStatement(SQL_GET_TASK);
             pstm->setInt(1, position);
             rs = pstm->executeQuery(SQL_GET_TASK);
-
+            cout << "Task: " << rs->getString("task") << endl;
             tmp = rs->getString("task");
 
             closeResultSet(rs);
-            closePreparedStatement(pstm);
+            // closePreparedStatement(pstm);
+            closeStatement(stm);
             closeConnection(con);
         }
         catch(sql::SQLException & ex) { }
