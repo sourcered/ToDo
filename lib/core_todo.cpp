@@ -41,13 +41,23 @@ namespace ToDo
         return state;
     }
 
+    bool Task::swapPosition(int position1, int position2)
+    {
+        bool state = false;
+        IDatabase * tmp = new IDatabase();
+        state = tmp->SQL_swapPosition(position1, position2);
+        delete tmp;
+        tmp = nullptr;
+        return state;
+    }
+
     void Log::print_tasks()
     {
         ODatabase * odatabase = new ODatabase();
         std::vector<std::string> tmp = odatabase->SQL_getTasks();
 
         for(auto it = tmp.begin(); it != tmp.end(); it++)
-            cout << *it << endl;
+            std::cout << *it << std::endl;
 
         delete odatabase;
         odatabase = nullptr;
@@ -56,9 +66,10 @@ namespace ToDo
     void Log::print_task(int position)
     {
         ODatabase * odatabase = new ODatabase();
-        std::string task = odatabase->SQL_getTaskByPostion(position);
+        std::string task;
+        task = odatabase->SQL_getTaskByPostion(position);
 
-        cout << task << endl;
+        std::cout << task << std::endl;
 
         delete odatabase;
         odatabase = nullptr;

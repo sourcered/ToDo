@@ -219,6 +219,12 @@ namespace ToDo
         catch(sql::SQLException & ex) { return false; }
     }
 
+    bool IDatabase::SQL_swapPosition(int position1, int position2)
+    {
+        
+        return false;
+    }
+
     std::vector<std::string> ODatabase::SQL_getTasks()
     {
         std::vector<std::string> tmp;
@@ -264,7 +270,7 @@ namespace ToDo
                     rs = stm->executeQuery(SQL_GET_TASKS_DESC);
 
                     for (size_t i = 0; rs->next(); i++)
-                        tmp.at(i) = rs->getString("task");
+                        tmp.push_back(rs->getString("task"));
 
                     closeResultSet(rs);
                     closeStatement(stm);
@@ -307,27 +313,27 @@ namespace ToDo
 
     std::string ODatabase::SQL_getTaskByPostion(int position)
     {
+        sql::Connection * con;
+        sql::PreparedStatement * pstm;
+        sql::ResultSet * rs;
+
         std::string tmp = "";
+
         try
         {
-            sql::Connection * con;
-            sql::PreparedStatement * pstm;
-            sql::ResultSet * rs;
-
             con = getConnection();
-
             pstm = con->prepareStatement(SQL_GET_TASK);
             pstm->setInt(1, position);
-            rs = pstm->executeQuery(SQL_GET_TASK);
-            cout << "Task: " << rs->getString("task") << endl;
-            tmp = rs->getString("task");
 
-            closeResultSet(rs);
-            // closePreparedStatement(pstm);
-            closeStatement(stm);
-            closeConnection(con);
+            rs = pstm->executeQuery();
+            rs->first();
+            tmp = rs->getString("task");
         }
-        catch(sql::SQLException & ex) { }
+        catch(sql::SQLException & ex) { std::cout << "Error..." << std::endl; }
+
+        closeResultSet(rs);
+        closePreparedStatement(pstm);
+        closeConnection(con);
 
         return tmp;
     }
@@ -356,4 +362,6 @@ namespace ToDo
 
         return tmp;
     }
+
+
 }

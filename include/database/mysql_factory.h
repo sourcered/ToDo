@@ -57,6 +57,7 @@ namespace ToDo
         bool SQL_update_task(std::string, int);                   //Update just task     || (new string, order)
         bool SQL_update_order(int, int);                          //Update just order    || (new Order, old order)
         bool SQL_update_task_order(std::string, int, int);        //Update task &  order || (new string, new order, old order)
+        bool SQL_swapPosition(int,int);
     };
 
 }
