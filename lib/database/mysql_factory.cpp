@@ -86,145 +86,6 @@ namespace ToDo
         catch(sql::SQLException & ex) { return false; }
     }
 
-    bool IDatabase::SQL_add_task(std::string task)
-    {
-        try
-        {
-            sql::Connection * con;
-            con = getConnection();
-
-            sql::PreparedStatement * pstm;
-            pstm = con->prepareStatement(SQL_ADD_TASK);
-            pstm->setString(1,task);  //New Task
-
-            // ----------GET LAST ORDER------------------
-            int order = SQL_getLastOrder() + 1;          //Get order
-            pstm->setInt(2,order);                       //Add to the last element Order
-            // ------------------------------------------
-            pstm->executeUpdate();
-
-            closePreparedStatement(pstm);
-            closeConnection(con);
-
-            return true;
-        }
-        catch(sql::SQLException & ex) { return false; }
-    }
-
-    bool IDatabase::SQL_add_task_order(std::string task, int order)
-    {
-        try
-        {
-            sql::Connection * con;
-            sql::PreparedStatement * pstm;
-
-            con = getConnection();
-            pstm = con->prepareStatement(SQL_ADD_TASK_ORDER);
-
-            pstm->setString(1,task);    //Task
-            pstm->setInt(2, order);     //Order
-
-            pstm->executeUpdate();
-
-            closePreparedStatement(pstm);
-            closeConnection(con);
-            return true;
-        }
-        catch(sql::SQLException & ex) { return false; }
-    }
-
-    bool IDatabase::SQL_remove_task(int position)
-    {
-        try
-        {
-            sql::Connection * con;
-            sql::PreparedStatement * pstm;
-
-            con = getConnection();
-            pstm = con->prepareStatement(SQL_REMOVE_TASK);
-            pstm->setInt(1, position);
-
-            pstm->executeUpdate();
-
-            closePreparedStatement(pstm);
-            closeConnection(con);
-            return true;
-        }
-        catch(sql::SQLException & ex) { return false; }
-    }
-
-    bool IDatabase::SQL_update_task(std::string task, int order)
-    {
-        try
-        {
-            sql::Connection * con;
-            sql::PreparedStatement * pstm;
-
-            con = getConnection();
-            pstm = con->prepareStatement(SQL_UPDATE_TASK);
-
-            pstm->setString(1,task);
-            pstm->setInt(2,order);
-
-            pstm->executeUpdate();
-
-            closePreparedStatement(pstm);
-            closeConnection(con);
-            return true;
-        }
-        catch(sql::SQLException & ex) { return false; }
-    }
-
-    bool IDatabase::SQL_update_order(int order,int new_order)
-    {
-        try
-        {
-            sql::Connection * con;
-            sql::PreparedStatement * pstm;
-
-            con = getConnection();
-            pstm = con->prepareStatement(SQL_UPDATE_ORDER);
-
-            pstm->setInt(1,new_order);
-            pstm->setInt(2,order);
-            pstm->executeUpdate();
-
-            closePreparedStatement(pstm);
-            closeConnection(con);
-            return true;
-        }
-        catch(sql::SQLException & ex) { return false; }
-    }
-
-    bool IDatabase::SQL_update_task_order(std::string task, int newOrder, int order)
-    {
-        try
-        {
-            sql::Connection * con;
-            sql::PreparedStatement * pstm;
-
-            con = getConnection();
-            pstm = con->prepareStatement(SQL_UPDATE_TASK_ORDER);
-
-            pstm->setString(1,task);
-            pstm->setInt(2, newOrder);
-            pstm->setInt(3,order);
-
-            pstm->executeUpdate();
-
-            closePreparedStatement(pstm);
-            closeConnection(con);
-            return true;
-        }
-        catch(sql::SQLException & ex) { return false; }
-    }
-
-    bool IDatabase::SQL_swapPosition(int position1, int position2)
-    {
-        
-        return false;
-    }
-
     std::vector<std::string> ODatabase::SQL_getTasks()
     {
         std::vector<std::string> tmp;
@@ -362,6 +223,155 @@ namespace ToDo
 
         return tmp;
     }
+
+    bool IDatabase::SQL_add_task(std::string task)
+    {
+        try
+        {
+            sql::Connection * con;
+            con = getConnection();
+
+            sql::PreparedStatement * pstm;
+            pstm = con->prepareStatement(SQL_ADD_TASK);
+            pstm->setString(1,task);  //New Task
+
+            // ----------GET LAST ORDER------------------
+            int order = SQL_getLastOrder() + 1;          //Get order
+            pstm->setInt(2,order);                       //Add to the last element Order
+            // ------------------------------------------
+            pstm->executeUpdate();
+
+            closePreparedStatement(pstm);
+            closeConnection(con);
+
+            return true;
+        }
+        catch(sql::SQLException & ex) { return false; }
+    }
+
+    bool IDatabase::SQL_add_task_order(std::string task, int order)
+    {
+        try
+        {
+            sql::Connection * con;
+            sql::PreparedStatement * pstm;
+
+            con = getConnection();
+            pstm = con->prepareStatement(SQL_ADD_TASK_ORDER);
+
+            pstm->setString(1,task);    //Task
+            pstm->setInt(2, order);     //Order
+
+            pstm->executeUpdate();
+
+            closePreparedStatement(pstm);
+            closeConnection(con);
+            return true;
+        }
+        catch(sql::SQLException & ex) { return false; }
+    }
+
+    bool IDatabase::SQL_remove_task(int position)
+    {
+        try
+        {
+            sql::Connection * con;
+            sql::PreparedStatement * pstm;
+
+            con = getConnection();
+            pstm = con->prepareStatement(SQL_REMOVE_TASK);
+            pstm->setInt(1, position);
+
+            pstm->executeUpdate();
+
+            closePreparedStatement(pstm);
+            closeConnection(con);
+            return true;
+        }
+        catch(sql::SQLException & ex) { return false; }
+    }
+
+    bool IDatabase::SQL_update_task(std::string task, int order)
+    {
+        try
+        {
+            sql::Connection * con;
+            sql::PreparedStatement * pstm;
+
+            con = getConnection();
+            pstm = con->prepareStatement(SQL_UPDATE_TASK);
+
+            pstm->setString(1,task);
+            pstm->setInt(2,order);
+
+            pstm->executeUpdate();
+
+            closePreparedStatement(pstm);
+            closeConnection(con);
+            return true;
+        }
+        catch(sql::SQLException & ex) { return false; }
+    }
+
+    bool IDatabase::SQL_update_order(int order,int new_order)
+    {
+        try
+        {
+            sql::Connection * con;
+            sql::PreparedStatement * pstm;
+
+            con = getConnection();
+            pstm = con->prepareStatement(SQL_UPDATE_ORDER);
+
+            pstm->setInt(1,new_order);
+            pstm->setInt(2,order);
+            pstm->executeUpdate();
+
+            closePreparedStatement(pstm);
+            closeConnection(con);
+            return true;
+        }
+        catch(sql::SQLException & ex) { return false; }
+    }
+
+    bool IDatabase::SQL_update_task_order(std::string task, int newOrder, int order)
+    {
+        try
+        {
+            sql::Connection * con;
+            sql::PreparedStatement * pstm;
+
+            con = getConnection();
+            pstm = con->prepareStatement(SQL_UPDATE_TASK_ORDER);
+
+            pstm->setString(1,task);
+            pstm->setInt(2, newOrder);
+            pstm->setInt(3,order);
+
+            pstm->executeUpdate();
+
+            closePreparedStatement(pstm);
+            closeConnection(con);
+            return true;
+        }
+        catch(sql::SQLException & ex) { return false; }
+    }
+
+    bool IDatabase::SQL_swapPosition(int position1, int position2)
+    {
+        ODatabase * odatabase = new ODatabase();
+        bool state = false;
+
+        std::string tmp = odatabase->SQL_getTaskByPostion(position1);
+        if(SQL_update_task(odatabase->SQL_getTaskByPostion(position2), position1)
+                                              && SQL_update_task(tmp, position2))
+                                                                    state = true;
+
+        delete odatabase;
+        odatabase = nullptr;
+        return state;
+    }
+
 
 
 }
