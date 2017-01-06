@@ -372,6 +372,4 @@ namespace ToDo
         return state;
     }
 
-
-
 }

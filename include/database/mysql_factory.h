@@ -24,6 +24,8 @@ namespace ToDo
     class Factory
     {
     public:
+        sql::Connection * con;
+
         sql::Connection * getConnection();
         bool closeConnection(sql::Connection *&);               //Close and delete
         bool closeStatement(sql::Statement *&);                 //Close and delete
@@ -35,6 +37,7 @@ namespace ToDo
     class IODatabse : public Factory                            //Abstract class
     {
     public:
+        // shared_ptr<sql::Connection> con;
         int SQL_getLastOrder();
     };
 
