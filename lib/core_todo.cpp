@@ -14,30 +14,22 @@ namespace ToDo
 
     bool Task::add(std::string task)
     {
-        bool state = false;
-        state = idatabase->SQL_add_task(task);
-        return state;
+        return idatabase->SQL_add_task(task);
     }
 
     bool Task::remove(int position)
     {
-        bool state = false;
-        state = idatabase->SQL_remove_task(position);
-        return state;
+        return idatabase->SQL_remove_task(position);;
     }
 
     bool Task::att(std::string task, int position)
     {
-        bool state = false;
-        state = idatabase->SQL_update_task(task, position);
-        return state;
+        return idatabase->SQL_update_task(task, position);
     }
 
     bool Task::swapPosition(int position1, int position2)
     {
-        bool state = false;
-        state = idatabase->SQL_swapPosition(position1, position2);
-        return state;
+        return idatabase->SQL_swapPosition(position1, position2);
     }
 
     Log::Log()
@@ -56,9 +48,6 @@ namespace ToDo
 
     void Log::print_task(int position)
     {
-        std::string task;
-        task = odatabase->SQL_getTaskByPostion(position);
-
-        std::cout << task << std::endl;
+        std::cout << odatabase->SQL_getTaskByPostion(position) << std::endl;
     }
 }

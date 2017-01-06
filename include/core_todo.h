@@ -27,9 +27,9 @@ namespace ToDo
     class Log
     {
     private:
-      std::shared_ptr<ODatabase> odatabase;
+        std::shared_ptr<ODatabase> odatabase;
     public:
-        Log();
+        explicit Log();
         void print_tasks();
         void print_task(int);
     };
