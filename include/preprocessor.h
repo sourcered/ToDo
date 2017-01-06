@@ -4,5 +4,6 @@
 #include <iostream>
 #include <stdlib.h>
 #include <vector>
+#include <memory>
 
 #endif

@@ -14,8 +14,8 @@ namespace ToDo
     class Task
     {
     private:
-        IODatabse io;
         bool state = false;
+        std::shared_ptr<IDatabase> idatabase;
     public:
         explicit Task();
         bool add(std::string);                          //Add task & auto increment position
@@ -27,7 +27,9 @@ namespace ToDo
     class Log
     {
     private:
+      std::shared_ptr<ODatabase> odatabase;
     public:
+        Log();
         void print_tasks();
         void print_task(int);
     };
