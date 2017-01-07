@@ -48,6 +48,6 @@ namespace ToDo
 
     void Log::print_task(int position)
     {
-        std::cout << odatabase->SQL_getTaskByPostion(position) << std::endl;
+        std::cout << odatabase->SQL_getTaskByPosition(position) << std::endl;
     }
 }

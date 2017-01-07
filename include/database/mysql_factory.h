@@ -46,8 +46,8 @@ namespace ToDo
     public:
         std::vector<std::string> SQL_getTasks();                 //Order by ASC
         std::vector<std::string> SQL_getTasks(order);            //Get task by Order
-        std::vector<int> SQL_getPostions();
-        std::string SQL_getTaskByPostion(int);
+        std::vector<int> SQL_getPositions();
+        std::string SQL_getTaskByPosition(int);
 
     };
 

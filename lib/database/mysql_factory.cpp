@@ -77,12 +77,6 @@ namespace ToDo
     {
         try
         {
-            sql::Driver * driver;
-            sql::Connection * con;
-
-            driver =  get_driver_instance();
-            con = driver->connect("tcp://127.0.0.1:3306", "root", "1234");
-
             sql::Statement * stm;
             stm = con->createStatement();
             stm->execute(SQL_CREATE_DATABASE);
@@ -90,7 +84,6 @@ namespace ToDo
             stm->execute(SQL_CREATE_TABLE);
 
             closeStatement(stm);
-            closeConnection(con);
             return true;
         }
         catch(sql::SQLException & ex) { return false; }
@@ -101,11 +94,9 @@ namespace ToDo
         std::vector<std::string> tmp;
         try
         {
-            sql::Connection * con;
             sql::Statement * stm;
             sql::ResultSet * rs;
 
-            con = getConnection();
             stm = con->createStatement();
             rs = stm->executeQuery(SQL_GET_TASKS_ASC);
 
@@ -114,7 +105,6 @@ namespace ToDo
 
             closeResultSet(rs);
             closeStatement(stm);
-            closeConnection(con);
         }
         catch(sql::SQLException & ex) { }
 
@@ -132,11 +122,9 @@ namespace ToDo
             case desc:
                 try
                 {
-                    sql::Connection * con;
                     sql::Statement * stm;
                     sql::ResultSet * rs;
 
-                    con = getConnection();
                     stm = con->createStatement();
                     rs = stm->executeQuery(SQL_GET_TASKS_DESC);
 
@@ -145,7 +133,6 @@ namespace ToDo
 
                     closeResultSet(rs);
                     closeStatement(stm);
-                    closeConnection(con);
                 }
                 catch(sql::SQLException & ex) { }
                 break;
@@ -157,16 +144,14 @@ namespace ToDo
         return tmp;
     }
 
-    std::vector<int> ODatabase::SQL_getPostions()
+    std::vector<int> ODatabase::SQL_getPositions()
     {
         std::vector<int> tmp;
         try
         {
-            sql::Connection * con;
             sql::Statement * stm;
             sql::ResultSet * rs;
 
-            con = getConnection();
             stm = con->createStatement();
             rs = stm->executeQuery(SQL_GET_POSTIONS_ASC);
 
@@ -175,16 +160,14 @@ namespace ToDo
 
             closeResultSet(rs);
             closeStatement(stm);
-            closeConnection(con);
         }
         catch(sql::SQLException & ex) { }
 
         return tmp;
     }
 
-    std::string ODatabase::SQL_getTaskByPostion(int position)
+    std::string ODatabase::SQL_getTaskByPosition(int position)
     {
-        sql::Connection * con;
         sql::PreparedStatement * pstm;
         sql::ResultSet * rs;
 
@@ -192,7 +175,6 @@ namespace ToDo
 
         try
         {
-            con = getConnection();
             pstm = con->prepareStatement(SQL_GET_TASK);
             pstm->setInt(1, position);
 
@@ -200,11 +182,10 @@ namespace ToDo
             rs->first();
             tmp = rs->getString("task");
         }
-        catch(sql::SQLException & ex) { std::cout << "Error..." << std::endl; }
+        catch(sql::SQLException & ex) { std::cout << "Error..." << std::endl; tmp = "404"; }
 
         closeResultSet(rs);
         closePreparedStatement(pstm);
-        closeConnection(con);
 
         return tmp;
     }
@@ -214,11 +195,9 @@ namespace ToDo
         int tmp = -1;
         try
         {
-            sql::Connection * con;
             sql::Statement * stm;
             sql::ResultSet * rs;
 
-            con = getConnection();
             stm = con->createStatement();
 
             rs = stm->executeQuery(SQL_GET_LAST_POSITION);
@@ -227,7 +206,6 @@ namespace ToDo
 
             closeResultSet(rs);
             closeStatement(stm);
-            closeConnection(con);
         }
         catch(sql::SQLException & ex) {  }
 
@@ -238,9 +216,6 @@ namespace ToDo
     {
         try
         {
-            sql::Connection * con;
-            con = getConnection();
-
             sql::PreparedStatement * pstm;
             pstm = con->prepareStatement(SQL_ADD_TASK);
             pstm->setString(1,task);  //New Task
@@ -252,7 +227,6 @@ namespace ToDo
             pstm->executeUpdate();
 
             closePreparedStatement(pstm);
-            closeConnection(con);
 
             return true;
         }
@@ -263,10 +237,8 @@ namespace ToDo
     {
         try
         {
-            sql::Connection * con;
             sql::PreparedStatement * pstm;
 
-            con = getConnection();
             pstm = con->prepareStatement(SQL_ADD_TASK_ORDER);
 
             pstm->setString(1,task);    //Task
@@ -275,7 +247,6 @@ namespace ToDo
             pstm->executeUpdate();
 
             closePreparedStatement(pstm);
-            closeConnection(con);
             return true;
         }
         catch(sql::SQLException & ex) { return false; }
@@ -285,17 +256,14 @@ namespace ToDo
     {
         try
         {
-            sql::Connection * con;
             sql::PreparedStatement * pstm;
 
-            con = getConnection();
             pstm = con->prepareStatement(SQL_REMOVE_TASK);
             pstm->setInt(1, position);
 
             pstm->executeUpdate();
 
             closePreparedStatement(pstm);
-            closeConnection(con);
             return true;
         }
         catch(sql::SQLException & ex) { return false; }
@@ -305,10 +273,8 @@ namespace ToDo
     {
         try
         {
-            sql::Connection * con;
             sql::PreparedStatement * pstm;
 
-            con = getConnection();
             pstm = con->prepareStatement(SQL_UPDATE_TASK);
 
             pstm->setString(1,task);
@@ -317,7 +283,6 @@ namespace ToDo
             pstm->executeUpdate();
 
             closePreparedStatement(pstm);
-            closeConnection(con);
             return true;
         }
         catch(sql::SQLException & ex) { return false; }
@@ -327,10 +292,8 @@ namespace ToDo
     {
         try
         {
-            sql::Connection * con;
             sql::PreparedStatement * pstm;
 
-            con = getConnection();
             pstm = con->prepareStatement(SQL_UPDATE_ORDER);
 
             pstm->setInt(1,new_order);
@@ -338,7 +301,6 @@ namespace ToDo
             pstm->executeUpdate();
 
             closePreparedStatement(pstm);
-            closeConnection(con);
             return true;
         }
         catch(sql::SQLException & ex) { return false; }
@@ -348,10 +310,8 @@ namespace ToDo
     {
         try
         {
-            sql::Connection * con;
             sql::PreparedStatement * pstm;
 
-            con = getConnection();
             pstm = con->prepareStatement(SQL_UPDATE_TASK_ORDER);
 
             pstm->setString(1,task);
@@ -361,7 +321,6 @@ namespace ToDo
             pstm->executeUpdate();
 
             closePreparedStatement(pstm);
-            closeConnection(con);
             return true;
         }
         catch(sql::SQLException & ex) { return false; }
@@ -369,17 +328,15 @@ namespace ToDo
 
     bool IDatabase::SQL_swapPosition(int position1, int position2)
     {
-        ODatabase * odatabase = new ODatabase();
-        bool state = false;
+        std::unique_ptr<ODatabase> odatabase(new ODatabase());
 
-        std::string tmp = odatabase->SQL_getTaskByPostion(position1);
-        if(SQL_update_task(odatabase->SQL_getTaskByPostion(position2), position1)
-                                              && SQL_update_task(tmp, position2))
-                                                                    state = true;
+        std::string tmp = odatabase->SQL_getTaskByPosition(position1);
+        std::string tmp2 = odatabase->SQL_getTaskByPosition(position2);
 
-        delete odatabase;
-        odatabase = nullptr;
-        return state;
+        if(tmp != "404" && tmp2 != "404" && SQL_update_task(odatabase->SQL_getTaskByPosition(position2), position1)
+                                               && SQL_update_task(tmp, position2))
+                                                                     return true;
+        return false;
     }
 
 }
