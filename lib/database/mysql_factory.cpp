@@ -12,6 +12,16 @@ namespace ToDo
       con->setSchema("DB_ToDo");
     }
 
+    Factory::~Factory()
+    {
+      delete rs;
+      rs = nullptr;
+      delete stm;
+      stm = nullptr;
+      delete pstm;
+      pstm = nullptr;
+    }
+
     sql::Connection * Factory::getConnection()
     {
         sql::Driver * driver;
@@ -77,13 +87,11 @@ namespace ToDo
     {
         try
         {
-            sql::Statement * stm;
             stm = con->createStatement();
             stm->execute(SQL_CREATE_DATABASE);
             con->setSchema("DB_ToDo");
             stm->execute(SQL_CREATE_TABLE);
 
-            closeStatement(stm);
             return true;
         }
         catch(sql::SQLException & ex) { return false; }
@@ -94,17 +102,11 @@ namespace ToDo
         std::vector<std::string> tmp;
         try
         {
-            sql::Statement * stm;
-            sql::ResultSet * rs;
-
             stm = con->createStatement();
             rs = stm->executeQuery(SQL_GET_TASKS_ASC);
 
             for (size_t i = 0; rs->next(); i++)
                 tmp.push_back(rs->getString("task"));
-
-            closeResultSet(rs);
-            closeStatement(stm);
         }
         catch(sql::SQLException & ex) { }
 
@@ -122,17 +124,11 @@ namespace ToDo
             case desc:
                 try
                 {
-                    sql::Statement * stm;
-                    sql::ResultSet * rs;
-
                     stm = con->createStatement();
                     rs = stm->executeQuery(SQL_GET_TASKS_DESC);
 
                     for (size_t i = 0; rs->next(); i++)
                         tmp.push_back(rs->getString("task"));
-
-                    closeResultSet(rs);
-                    closeStatement(stm);
                 }
                 catch(sql::SQLException & ex) { }
                 break;
@@ -149,17 +145,11 @@ namespace ToDo
         std::vector<int> tmp;
         try
         {
-            sql::Statement * stm;
-            sql::ResultSet * rs;
-
             stm = con->createStatement();
             rs = stm->executeQuery(SQL_GET_POSTIONS_ASC);
 
             for (size_t i = 0; rs->next(); i++)
                 tmp.at(i) = rs->getInt("position");
-
-            closeResultSet(rs);
-            closeStatement(stm);
         }
         catch(sql::SQLException & ex) { }
 
@@ -168,9 +158,6 @@ namespace ToDo
 
     std::string ODatabase::SQL_getTaskByPosition(int position)
     {
-        sql::PreparedStatement * pstm;
-        sql::ResultSet * rs;
-
         std::string tmp = "";
 
         try
@@ -184,9 +171,6 @@ namespace ToDo
         }
         catch(sql::SQLException & ex) { std::cout << "Error..." << std::endl; tmp = "404"; }
 
-        closeResultSet(rs);
-        closePreparedStatement(pstm);
-
         return tmp;
     }
 
@@ -195,17 +179,11 @@ namespace ToDo
         int tmp = -1;
         try
         {
-            sql::Statement * stm;
-            sql::ResultSet * rs;
-
             stm = con->createStatement();
 
             rs = stm->executeQuery(SQL_GET_LAST_POSITION);
 
             tmp = rs->getInt("position");
-
-            closeResultSet(rs);
-            closeStatement(stm);
         }
         catch(sql::SQLException & ex) {  }
 
@@ -216,7 +194,6 @@ namespace ToDo
     {
         try
         {
-            sql::PreparedStatement * pstm;
             pstm = con->prepareStatement(SQL_ADD_TASK);
             pstm->setString(1,task);  //New Task
 
@@ -225,8 +202,6 @@ namespace ToDo
             pstm->setInt(2,order);                       //Add to the last element Order
             // ------------------------------------------
             pstm->executeUpdate();
-
-            closePreparedStatement(pstm);
 
             return true;
         }
@@ -237,8 +212,6 @@ namespace ToDo
     {
         try
         {
-            sql::PreparedStatement * pstm;
-
             pstm = con->prepareStatement(SQL_ADD_TASK_ORDER);
 
             pstm->setString(1,task);    //Task
@@ -246,7 +219,6 @@ namespace ToDo
 
             pstm->executeUpdate();
 
-            closePreparedStatement(pstm);
             return true;
         }
         catch(sql::SQLException & ex) { return false; }
@@ -256,14 +228,11 @@ namespace ToDo
     {
         try
         {
-            sql::PreparedStatement * pstm;
-
             pstm = con->prepareStatement(SQL_REMOVE_TASK);
             pstm->setInt(1, position);
 
             pstm->executeUpdate();
 
-            closePreparedStatement(pstm);
             return true;
         }
         catch(sql::SQLException & ex) { return false; }
@@ -273,8 +242,6 @@ namespace ToDo
     {
         try
         {
-            sql::PreparedStatement * pstm;
-
             pstm = con->prepareStatement(SQL_UPDATE_TASK);
 
             pstm->setString(1,task);
@@ -282,7 +249,6 @@ namespace ToDo
 
             pstm->executeUpdate();
 
-            closePreparedStatement(pstm);
             return true;
         }
         catch(sql::SQLException & ex) { return false; }
@@ -292,15 +258,12 @@ namespace ToDo
     {
         try
         {
-            sql::PreparedStatement * pstm;
-
             pstm = con->prepareStatement(SQL_UPDATE_ORDER);
 
             pstm->setInt(1,new_order);
             pstm->setInt(2,order);
             pstm->executeUpdate();
 
-            closePreparedStatement(pstm);
             return true;
         }
         catch(sql::SQLException & ex) { return false; }
@@ -310,8 +273,6 @@ namespace ToDo
     {
         try
         {
-            sql::PreparedStatement * pstm;
-
             pstm = con->prepareStatement(SQL_UPDATE_TASK_ORDER);
 
             pstm->setString(1,task);
@@ -320,7 +281,6 @@ namespace ToDo
 
             pstm->executeUpdate();
 
-            closePreparedStatement(pstm);
             return true;
         }
         catch(sql::SQLException & ex) { return false; }
