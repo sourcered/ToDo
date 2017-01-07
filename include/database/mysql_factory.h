@@ -24,8 +24,8 @@ namespace ToDo
     class Factory
     {
     public:
-        sql::Connection * con;
-
+        std::shared_ptr<sql::Connection> con;
+        Factory();
         sql::Connection * getConnection();
         bool closeConnection(sql::Connection *&);               //Close and delete
         bool closeStatement(sql::Statement *&);                 //Close and delete

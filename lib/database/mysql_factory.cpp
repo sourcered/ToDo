@@ -2,6 +2,16 @@
 
 namespace ToDo
 {
+    Factory::Factory()
+    {
+      sql::Driver * driver;
+
+      driver =  get_driver_instance();
+      std::shared_ptr<sql::Connection> tmp(driver->connect("tcp://127.0.0.1:3306", "root", "1234"));
+      con = tmp;
+      con->setSchema("DB_ToDo");
+    }
+
     sql::Connection * Factory::getConnection()
     {
         sql::Driver * driver;

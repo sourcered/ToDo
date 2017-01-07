@@ -21,7 +21,7 @@ namespace ToDo
         bool add(std::string);                          //Add task & auto increment position
         bool remove(int);                               //Remove task By Positon
         bool att(std::string, int);                     //Update Task set Task get Postion
-        bool swapPosition(int,int);
+        bool swapPosition(int,int);                     //Swap position of 2 any elements
     };
 
     class Log
