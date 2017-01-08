@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/res">
+        <file>img/paste.png</file>
+        <file>img/exit.png</file>
+        <file>img/crop.png</file>
+        <file>img/copy.png</file>
+        <file>img/about.png</file>
+    </qresource>
+</RCC>
