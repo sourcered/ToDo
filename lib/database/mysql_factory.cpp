@@ -83,7 +83,7 @@ namespace ToDo
         catch(sql::SQLException & ex) { return false; }
     }
 
-    bool update_positions()
+    bool Factory::update_positions()
     {
       try
       {

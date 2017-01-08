@@ -8,5 +8,3 @@ DONE:
 
 OBS:
 #Compiler Flags: sudo g++ -std=c++14 -Wall -I/usr/include/cppconn -o out/todo todo.cpp lib/core_todo.cpp lib/database/mysql_factory.cpp -L/usr/lib -lmysqlcppconn
-
-
