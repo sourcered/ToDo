@@ -36,6 +36,7 @@ namespace ToDo
         bool closeStatement(sql::Statement *&);                 //Close and delete
         bool closePreparedStatement(sql::PreparedStatement *&); //Close and delete
         bool closeResultSet(sql::ResultSet *&);                 //Close and delete
+        bool update_positions();
         bool init();
     };
 

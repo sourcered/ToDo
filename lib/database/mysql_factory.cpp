@@ -83,6 +83,22 @@ namespace ToDo
         catch(sql::SQLException & ex) { return false; }
     }
 
+    bool update_positions()
+    {
+      try
+      {
+          stm = con->createStatement();
+          stm->execute(SQL_DROP_POSITION);
+          stm->execute(SQL_AUTOINCREMENT_1);
+          stm->execute(SQL_ADD_POSITION_COLUMN);
+
+          return true;
+      }
+      catch(sql::SQLException & ex) { return false; }
+
+      return false;
+    }
+
     bool Factory::init()
     {
         try

@@ -1,15 +1,12 @@
-#Create a unique connection, improving memory and process, (Problem : Every operation request a new connection)
-#Improve connection class Task (add,remove,att, etc.), Get only a connection, maybe in the constructor
-
-
 DONE:
 #Create database if not exists When start
 #Get last order core_todo::83
 #Pass pointer by reference Factory's class
-
+#Create a unique connection, improving memory and process, (Problem : Every operation request a new connection)
+#Improve connection class Task (add,remove,att, etc.), Get only a connection, maybe in the constructor
+#TO ADD: SwapPosition -> (P1, P2) :  tmp = P1 , P1 = P2, P2 = tmp
 
 OBS:
 #Compiler Flags: sudo g++ -std=c++14 -Wall -I/usr/include/cppconn -o out/todo todo.cpp lib/core_todo.cpp lib/database/mysql_factory.cpp -L/usr/lib -lmysqlcppconn
 
-TO ADD:
-#SwapPosition -> (P1, P2) :  tmp = P1 , P1 = P2, P2 = tmp
+
